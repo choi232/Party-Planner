@@ -5,4 +5,11 @@ public class Company{
         companyID = setCompanyID;
         companyName = setCompanyName;
     }
+
+    public int getCompanyID(){
+        return companyID;
+    }
+    public String getCompanyName(){
+        return companyName;
+    }
 }
