@@ -26,11 +26,13 @@ public class Party{
 
             while(scanCompany.hasNextLine()){
                 String line = scanCompany.nextLine();
-                String[] splitStr = line.split(",");
-                System.out.println(Integer.parseInt(splitStr[0]));
-                Company company = new Company(Integer.parseInt(splitStr[0]), splitStr[1]);
-                companyList.add(company);
+                if(line.length() > 0){
+                    String[] splitStr = line.split(",");
+                    Company company = new Company(Integer.parseInt(splitStr[0]), splitStr[1]);
+                    companyList.add(company);
+                }
             }
+            numCompany = companyList.size();
 
             while(scanGuests.hasNextLine()){
                 String line = scanGuests.nextLine();
@@ -49,7 +51,7 @@ public class Party{
 
     public void printCompanyList(){
         for(int i = 0; i < numCompany; i++){
-            System.out.println(companyList.get(i));
+            System.out.println(companyList.get(i).getCompanyName());
         }
     }
 }
