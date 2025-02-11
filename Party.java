@@ -36,6 +36,11 @@ public class Party{
 
             while(scanGuests.hasNextLine()){
                 String line = scanGuests.nextLine();
+                String[] splitStr = line.split(",");
+                int compID =  Integer.parseInt(splitStr[3]);
+                Attendee attendee = new Attendee(splitStr[2] + " " + splitStr[1], companyList.get(compID-1).getCompanyName(), compID);
+                companyList.get(compID-1).setEmployee(attendee, numTables);
+
             }
         }
 
@@ -46,12 +51,53 @@ public class Party{
     }
 
     public void register(){
+        Scanner scan = new Scanner(System.in);
+        printVacancy();
+        while(true){
+            char c = scan.next().charAt(0);
+            System.out.println("Would you like to register? Enter y/n: ");
+            if(c == 'n') break;
 
+            System.out.println("Registrar Name: ");
+            String name = scan.nextLine();
+            System.out.println("Registrar Company: ");
+            String company = scan.nextLine();
+            int companyID;
+            outer: while(true){
+                for(int i = 0; i < numCompany; i++){
+                    if(companyList.get(i).getCompanyName().toLowerCase().equals(company)){
+                        companyID = companyList.get(i).getCompanyID();
+                        break outer;
+                    }
+                }
+                System.out.println("Company not found. Please enter a new company: ");
+                company = scan.nextLine();
+            }
+            Attendee attendee = new Attendee();
+            if(companyList.get(companyID-1).addEmployee()
+
+
+
+        }
+        System.out.println();
+    }
+
+    public void printVacancy(){
+        System.out.println("Here is a list of open registrations for each company: ");
+        for(int i = 0; i < numCompany; i++){
+            System.out.println(companyList.get(i).getNumEmployee() + "/" + numTables);
+        }
     }
 
     public void printCompanyList(){
         for(int i = 0; i < numCompany; i++){
             System.out.println(companyList.get(i).getCompanyName());
+        }
+
+        for(int i = 0; i < numCompany; i++){
+            for(int j = 0; j < companyList.get(i).getNumEmployee(); j++){
+                System.out.println(companyList.get(i).getEmployee(j).toString());
+            }
         }
     }
 }
