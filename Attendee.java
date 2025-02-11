@@ -64,4 +64,9 @@ public class Attendee{
     public void setCompanyName(String setCompanyName){
         companyName = setCompanyName;
     }
+
+    //toString
+    public String toString(){
+        return ("Name: " + name + "\n") + ("Company Name: " + companyName + "\n") + ("Company ID: " + companyID + "\n") + ("Table ID: " + tableID + "\n") + ("Table Position: " + tablePos + "\n");
+    }
 }
