@@ -53,39 +53,57 @@ public class Party{
     public void register(){
         Scanner scan = new Scanner(System.in);
         printVacancy();
-        while(true){
-            char c = scan.next().charAt(0);
-            System.out.println("Would you like to register? Enter y/n: ");
-            if(c == 'n') break;
 
+        System.out.println("Would you like to register? Enter y/n: ");
+        String input = scan.nextLine();
+
+        if(!input.equals("n")){
             System.out.println("Registrar Name: ");
             String name = scan.nextLine();
             System.out.println("Registrar Company: ");
-            String company = scan.nextLine();
-            int companyID;
-            outer: while(true){
-                for(int i = 0; i < numCompany; i++){
-                    if(companyList.get(i).getCompanyName().toLowerCase().equals(company)){
-                        companyID = companyList.get(i).getCompanyID();
-                        break outer;
+            String companyName = scan.nextLine(); 
+            int companyID;    
+            String registrars = "";
+
+            while(true){
+                inner: while(true){
+                    for(int i = 0; i < numCompany; i++){
+                        if(companyList.get(i).getCompanyName().toLowerCase().equals(companyName.toLowerCase())){
+                            companyID = companyList.get(i).getCompanyID();
+                            break inner;
+                        }
                     }
+                    System.out.println("Company not found. Please enter a new company: ");
+                    companyName = scan.nextLine();
                 }
-                System.out.println("Company not found. Please enter a new company: ");
-                company = scan.nextLine();
+
+
+                Attendee attendee = new Attendee(name, companyName,companyID);
+                companyList.get(companyID-1).setEmployee(attendee, numTables);  
+                registrars += attendee.toString() + "\n";  
+
+
+                System.out.println("Would you like to register another attendee? Enter y/n: ");
+                input = scan.nextLine();
+
+                if (input.equals("n")) break;
+                else{
+                    System.out.println("Registrar Name: ");
+                    name = scan.nextLine();
+                    System.out.println("Registrar Company: ");
+                    companyName = scan.nextLine();                 
+                }
             }
-            Attendee attendee = new Attendee();
-            if(companyList.get(companyID-1).addEmployee()
-
-
-
+            System.out.println("Added Registrars: \n" );
+            System.out.println(registrars);
         }
-        System.out.println();
+
     }
 
     public void printVacancy(){
         System.out.println("Here is a list of open registrations for each company: ");
         for(int i = 0; i < numCompany; i++){
-            System.out.println(companyList.get(i).getNumEmployee() + "/" + numTables);
+            System.out.println(companyList.get(i).getCompanyName() + " " + companyList.get(i).getCompanySize() + "/" + numTables);
         }
     }
 
@@ -95,7 +113,7 @@ public class Party{
         }
 
         for(int i = 0; i < numCompany; i++){
-            for(int j = 0; j < companyList.get(i).getNumEmployee(); j++){
+            for(int j = 0; j < companyList.get(i).getCompanySize(); j++){
                 System.out.println(companyList.get(i).getEmployee(j).toString());
             }
         }
