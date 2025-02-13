@@ -4,7 +4,7 @@ public class Company{
     private int companyID;
     private String companyName;
     private ArrayList<Attendee> employee = new ArrayList<Attendee>();
-    private int numEmployee;
+    private int companySize = 0;
     public Company(int setCompanyID, String setCompanyName){
         companyID = setCompanyID;
         companyName = setCompanyName;
@@ -17,8 +17,8 @@ public class Company{
         return companyName;
     }
 
-    public int getNumEmployee(){
-        return numEmployee;
+    public int getCompanySize(){
+        return companySize;
     }
 
     public Attendee getEmployee(int index){
@@ -28,7 +28,7 @@ public class Company{
     public void setEmployee(Attendee attendee, int numTables){
         if(employee.size() < numTables){
             employee.add(attendee);
-            numEmployee = employee.size();
+            companySize = employee.size();
         }
     }
 }
