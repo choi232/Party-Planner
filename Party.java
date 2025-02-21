@@ -1,3 +1,4 @@
+
 /** 
  * Party.java File for creating Party objects in Party Planner
  * @author Mikael Choi 
@@ -13,6 +14,7 @@ import java.io.File;  // Import the File class
 import java.io.FileNotFoundException;  // Import this class to handle errors
 import java.util.Scanner; // Import the Scanner class to read text files
 import java.util.ArrayList; //Import ArrayList class
+import java.util.Collections;
 
 /*
 Party Class: Blueprint to create an instance of Party Planner program tailored
@@ -222,13 +224,14 @@ public class Party{
             }
         }
         if(input.equals("yes") || input.equals("y")){
+            System.out.println("Company: Full Name (TableID, TablePos)");
             //Iterating through companyList & employee ArrayLists and printing out names
             for(int i = 0; i < numCompany; i++){
                 System.out.print(companyList.get(i).getCompanyName() + ": ");
                 if(companyList.get(i).getCompanySize() == 0) System.out.print("N/A");
                 for(int j = 0; j < companyList.get(i).getCompanySize(); j++){
-                    if(j == companyList.get(i).getCompanySize()-1) System.out.print(companyList.get(i).getEmployee(j).getName());
-                    else System.out.print(companyList.get(i).getEmployee(j).getName() + ", ");
+                    if(j == companyList.get(i).getCompanySize()-1) System.out.print(companyList.get(i).getEmployee(j).getName() + " (" + companyList.get(i).getEmployee(j).getTableID() + ", " + companyList.get(i).getEmployee(j).getTablePos() + ")");
+                    else System.out.print(companyList.get(i).getEmployee(j).getName() + " (" + companyList.get(i).getEmployee(j).getTableID() + ", " + companyList.get(i).getEmployee(j).getTablePos() + "), ");
                 }
                 System.out.println();
             }
@@ -252,12 +255,13 @@ public class Party{
             }
         }
         if(input.equals("yes") || input.equals("y")){
+            System.out.println("Table: Full Name (TableID, TablePos)\n");
             //Iterating through attendeeList ArrayList and printing out names
             for(int i = 0; i < numTables; i++){
                 System.out.print("Table " + (i+1) + ": ");
                 for(int j = 0; j < numSeats; j++){
-                    if(j == numSeats-1) System.out.print(attendeeList.get(i).get(j).getName());
-                    else System.out.print(attendeeList.get(i).get(j).getName() + ", ");
+                    if(j == numSeats-1) System.out.print(attendeeList.get(i).get(j).getName() + " (" + attendeeList.get(i).get(j).getTableID() + ", " + attendeeList.get(i).get(j).getTablePos() + ")");
+                    else System.out.print(attendeeList.get(i).get(j).getName() + " (" + attendeeList.get(i).get(j).getTableID() + ", " + attendeeList.get(i).get(j).getTablePos() + "), ");
                 }//inner for
                 System.out.println();
             }//outer for
@@ -326,19 +330,12 @@ public class Party{
             }
         }
         while(input.equals("y") || input.equals("yes")){
-            System.out.print("Enter attendee's ID Number: ");
-            int searchID;
-            //Input Validation for proper integer using try catch in a while loop to continue prompting user
-            while (true){
-                try {
-                    searchID = Integer.parseInt(scan.nextLine());
-                    break;
-                } 
-                catch (NumberFormatException e) {
-                    System.out.println("Invalid input, please enter an integer ID: ");
-                }
-            }
+            
+            System.out.print("Enter attendee's full name (first last): ");
+            String search = scan.nextLine();
             System.out.println();
+            
+            searchList.sort((a, b) -> {return a.getName().compareTo(b.getName());});
 
             //Clean through searchList to erase people who signed up for the event BUT were not placed onto tables
             //Leaves only attendees in search list after iterating through
@@ -350,13 +347,14 @@ public class Party{
             int lowIndex = 0; //lower bound of possible values
             int highIndex = searchList.size()-1; //upper bound of possible values
             boolean isFound = false; //bool flag for if searching value is not in data set
-            int middle, guess, counter = 0;
+            int middle, counter = 0;
+            String guess;
 
 
             while(highIndex - lowIndex + 1 > 0){ //size of array is greater than zero
                 counter++;
                 middle = lowIndex + (highIndex - lowIndex)/2; //set middle to half of possible array plus current lower bound
-                guess = searchList.get(middle).getID();
+                guess = searchList.get(middle).getName();
 
                 //Verbose print commands to show processing
                 System.out.println("Iteration #" + counter); //implementation of counter for search length
@@ -365,20 +363,20 @@ public class Party{
                 System.out.println("lowIndex & highIndex Range: (" + lowIndex + ", " + highIndex + ")\n");
 
                 //check if guess is right
-                if(guess == searchID){
-                    System.out.println("Found ID Match: " + guess);
+                if(guess.compareTo(search) == 0){
+                    System.out.println("Found Match: " + guess);
                     isFound = true;
                     System.out.println("\n" + searchList.get(middle).toString());
                     break;
                 }
 
                 //guess too high then adjust upper bound
-                else if(guess > searchID){
+                else if(guess.compareTo(search) > 0){
                     highIndex = middle - 1;
                 }
 
                 //guess too low then adjust lower bound
-                else if(guess < searchID){
+                else if(guess.compareTo(search) < 0){
                     lowIndex = middle + 1;
                 }
             }
@@ -397,6 +395,7 @@ public class Party{
                     else if(input.equals("no") || input.equals("n")) break;
                 }
             }
-        }
-    }
-}
+
+        }//while loop
+    }//method
+}//class
