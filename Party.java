@@ -45,7 +45,6 @@ public class Party{
     */
 
     public void runPartyPlanner(){
-        System.out.println("\n\nWelcome to Party Planner, a reusable program which organizes seating arrangements for professional events based on an inputted amount of tables and seats.\n");
         readFile();
         register();
         placeAttendees();
@@ -224,14 +223,16 @@ public class Party{
             }
         }
         if(input.equals("yes") || input.equals("y")){
-            System.out.println("Company: Full Name (TableID, TablePos)");
+            System.out.println("Company: Full Name (TableID, TablePos)\n");
             //Iterating through companyList & employee ArrayLists and printing out names
             for(int i = 0; i < numCompany; i++){
                 System.out.print(companyList.get(i).getCompanyName() + ": ");
-                if(companyList.get(i).getCompanySize() == 0) System.out.print("N/A");
+                if(companyList.get(i).getCompanySize() == 0 || companyList.get(i).getEmployee(0).getTableID() == -1) System.out.print("N/A");
                 for(int j = 0; j < companyList.get(i).getCompanySize(); j++){
-                    if(j == companyList.get(i).getCompanySize()-1) System.out.print(companyList.get(i).getEmployee(j).getName() + " (" + companyList.get(i).getEmployee(j).getTableID() + ", " + companyList.get(i).getEmployee(j).getTablePos() + ")");
-                    else System.out.print(companyList.get(i).getEmployee(j).getName() + " (" + companyList.get(i).getEmployee(j).getTableID() + ", " + companyList.get(i).getEmployee(j).getTablePos() + "), ");
+                    if(companyList.get(i).getEmployee(j).getTableID() != -1){
+                        if(j == companyList.get(i).getCompanySize()-1) System.out.print(companyList.get(i).getEmployee(j).getName() + " (" + companyList.get(i).getEmployee(j).getTableID() + ", " + companyList.get(i).getEmployee(j).getTablePos() + ")");
+                        else System.out.print(companyList.get(i).getEmployee(j).getName() + " (" + companyList.get(i).getEmployee(j).getTableID() + ", " + companyList.get(i).getEmployee(j).getTablePos() + "), ");
+                    }
                 }
                 System.out.println();
             }
@@ -255,13 +256,13 @@ public class Party{
             }
         }
         if(input.equals("yes") || input.equals("y")){
-            System.out.println("Table: Full Name (TableID, TablePos)\n");
+            System.out.println("Table: Full Name (TableID, TablePos, CompanyName)\n");
             //Iterating through attendeeList ArrayList and printing out names
             for(int i = 0; i < numTables; i++){
                 System.out.print("Table " + (i+1) + ": ");
                 for(int j = 0; j < numSeats; j++){
-                    if(j == numSeats-1) System.out.print(attendeeList.get(i).get(j).getName() + " (" + attendeeList.get(i).get(j).getTableID() + ", " + attendeeList.get(i).get(j).getTablePos() + ")");
-                    else System.out.print(attendeeList.get(i).get(j).getName() + " (" + attendeeList.get(i).get(j).getTableID() + ", " + attendeeList.get(i).get(j).getTablePos() + "), ");
+                    if(j == numSeats-1) System.out.print(attendeeList.get(i).get(j).getName() + " (" + attendeeList.get(i).get(j).getTableID() + ", " + attendeeList.get(i).get(j).getTablePos() + ", " + attendeeList.get(i).get(j).getCompanyName() + ")");
+                    else System.out.print(attendeeList.get(i).get(j).getName() + " (" + attendeeList.get(i).get(j).getTableID() + ", " + attendeeList.get(i).get(j).getTablePos() + ", " + attendeeList.get(i).get(j).getCompanyName() + "), ");
                 }//inner for
                 System.out.println();
             }//outer for
