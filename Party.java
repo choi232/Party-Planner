@@ -121,8 +121,8 @@ public class Party{
             System.out.println("\nHere is a list of open registrations for each company based on the imported data: \n");
             //Iterate through companies to print each company and the available registration spots
             for(int i = 0; i < numCompany; i++){
-                if (i == numCompany-1) System.out.print(companyList.get(i).getCompanyName() + " " + companyList.get(i).getCompanySize() + "/" + numSeats);
-                else System.out.print(companyList.get(i).getCompanyName() + " " + companyList.get(i).getCompanySize() + "/" + numSeats + "; ");
+                if (i == numCompany-1) System.out.print(companyList.get(i).getCompanyName() + " " + companyList.get(i).getCompanySize() + "/" + numTables);
+                else System.out.print(companyList.get(i).getCompanyName() + " " + companyList.get(i).getCompanySize() + "/" + numTables + "; ");
                 if((i+1)%2==0) System.out.println();
             } //for loop
         }
@@ -154,11 +154,16 @@ public class Party{
                     for(int i = 0; i < numCompany; i++){
                         if(companyList.get(i).getCompanyName().toLowerCase().equals(companyName.toLowerCase())){
                             companyID = companyList.get(i).getCompanyID();
+                            companyName = companyList.get(i).getCompanyName();
                             break inner;
                         } //if
                     }//for
-                    System.out.print("\nCompany not found. Please enter a new company: ");
-                    companyName = scan.nextLine();
+                    Company company = new Company(companyList.size()+1, companyName);
+                    companyID = company.getCompanyID();
+                    companyList.add(company);
+                    System.out.println("\nAdded New Company: " + company.getCompanyName());
+                    numCompany = companyList.size();
+                    break inner;
                 } //outer while
 
                 //Creating Attendee objects & adding to employee ArrayList
@@ -175,9 +180,9 @@ public class Party{
                 if (input.equals("n") || input.equals("no")) break;
 
                 else if (input.equals("y") || input.equals("yes")){
-                    System.out.println("Registrar Name: ");
+                    System.out.print("\nRegistrar Name: ");
                     name = scan.nextLine();
-                    System.out.println("Registrar Company: ");
+                    System.out.print("\nRegistrar Company: ");
                     companyName = scan.nextLine();                 
                 } //else if
 
@@ -190,10 +195,9 @@ public class Party{
                     if (input.equals("n") || input.equals("no")) break;
 
                     else if (input.equals("y") || input.equals("yes")){
-                    System.out.println();
-                    System.out.println("Registrar Name: ");
+                    System.out.print("\nRegistrar Name: ");
                     name = scan.nextLine();
-                    System.out.println("Registrar Company: ");
+                    System.out.print("\nRegistrar Company: ");
                     companyName = scan.nextLine();                 
                     } //else if
                 } //else
@@ -211,8 +215,9 @@ public class Party{
     void return type & no args
     */
     public void printCompanyRoster(){
+        numCompany = companyList.size();
         Scanner scan = new Scanner(System.in);
-        //It
+        //Input Validation of yes and no
         System.out.print("\nWould you like to view a company roster of the seating arrangements? Enter 'y' or 'n': ");
         String input = scan.nextLine();
         if(!input.equals("y") && !input.equals("n") && !input.equals("yes") && !input.equals("no")){
@@ -245,6 +250,7 @@ public class Party{
     void return type & no args
     */
     public void printTableRoster(){
+        numCompany = companyList.size();
         Scanner scan = new Scanner(System.in);
         System.out.print("\nWould you like to view a table roster of the seating arrangements? Enter 'y' or 'n': ");
         String input = scan.nextLine();
@@ -256,16 +262,19 @@ public class Party{
             }
         }
         if(input.equals("yes") || input.equals("y")){
-            System.out.println("Table: Full Name (TableID, TablePos, CompanyName)\n");
+            System.out.println("\nTable: Full Name (TableID, TablePos, CompanyName)\n");
             //Iterating through attendeeList ArrayList and printing out names
-            for(int i = 0; i < numTables; i++){
+            outer: for(int i = 0; i < numTables; i++){
                 System.out.print("Table " + (i+1) + ": ");
                 for(int j = 0; j < numSeats; j++){
-                    if(j == numSeats-1) System.out.print(attendeeList.get(i).get(j).getName() + " (" + attendeeList.get(i).get(j).getTableID() + ", " + attendeeList.get(i).get(j).getTablePos() + ", " + attendeeList.get(i).get(j).getCompanyName() + ")");
+                    if(attendeeList.get(i).get(j).getTableID() == -1) break outer;
+                    else if(j == numSeats-1) System.out.print(attendeeList.get(i).get(j).getName() + " (" + attendeeList.get(i).get(j).getTableID() + ", " + attendeeList.get(i).get(j).getTablePos() + ", " + attendeeList.get(i).get(j).getCompanyName() + ")");
                     else System.out.print(attendeeList.get(i).get(j).getName() + " (" + attendeeList.get(i).get(j).getTableID() + ", " + attendeeList.get(i).get(j).getTablePos() + ", " + attendeeList.get(i).get(j).getCompanyName() + "), ");
+                    
                 }//inner for
-                System.out.println();
+                System.out.println("\n");
             }//outer for
+            System.out.println();
         }//outer if
     }//method closing bracket
 
@@ -276,6 +285,7 @@ public class Party{
     void return type & no args
     */
     public void placeAttendees(){
+        numCompany = companyList.size();
         //initialize ArrayList attendeeList with numTables amount of ArrayLists inside attendeeList
         for(int i = 0; i < numTables; i++){
             ArrayList<Attendee> table = new ArrayList<Attendee>();
@@ -360,7 +370,7 @@ public class Party{
                 //Verbose print commands to show processing
                 System.out.println("Iteration #" + counter); //implementation of counter for search length
                 System.out.print("Middle Index: " + middle + ";");
-                System.out.println("  ID: " + guess);
+                System.out.println("  Name: " + guess);
                 System.out.println("lowIndex & highIndex Range: (" + lowIndex + ", " + highIndex + ")\n");
 
                 //check if guess is right
